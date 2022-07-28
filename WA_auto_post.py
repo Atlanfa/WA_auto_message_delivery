@@ -1,13 +1,15 @@
 from datetime import datetime, timedelta
+from random import randint
 from time import sleep
 import pywhatkit as wk
+import codecs
 
 # read data from file and split into list of strings
 with open('phones and groups.txt', 'r') as f:
     data = f.read().splitlines()
 
 # read the message from a file including emoji
-with open('message.txt', 'r') as f:
+with codecs.open('message.txt', 'r', 'utf-8') as f:
     msg = f.read()
 
 # print the time when while loop starts
@@ -22,15 +24,15 @@ while len(data) > 0:
     else:
         num = 50
     for i in range(0, num):
-        # get current time, add 2 minute to it and split it into hours, and minutes
-        time = datetime.now() + timedelta(minutes=2)
+        # get current time, add random seconds between 90 and 120 to it and split it into hours, and minutes # this script will automatically send the message add some more time 
+        time = datetime.now() + timedelta(seconds=randint(90, 120))
         hours = time.hour
         minutes = time.minute
         # specify if data[0] is a phone number or group id
         if data[0].startswith('+'):
-            wk.sendwhatmsg(data[0], message=msg, hours=hours, minutes=minutes)
+            wk.sendwhatmsg(data[0], message=msg, time_hour=hours, time_min=minutes)
         else:
-            wk.sendwhatmsg_to_group(data[0], message=msg, hours=hours, minutes=minutes)
+            wk.sendwhatmsg_to_group(data[0], message=msg, time_hour=hours, time_min=minutes)
         # print the phone number or group id and the message that was sent and time it was sent
         print(f'Message was sent to {data[0]}, the message {msg}, sent in {hours}:{minutes}')
 
@@ -52,7 +54,6 @@ while len(data) > 0:
     print()
 # after while is finished, print the time when the program finished
 print(f'Program finished at {datetime.now()}')
-
 
 
 
